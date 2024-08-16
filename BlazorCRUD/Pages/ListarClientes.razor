@@ -1,0 +1,53 @@
+﻿@page "/ListarClientes"
+@using Data
+@using Interfaces
+@inject IClienteServicios ClientesServicio
+
+<h3>ListarClientes</h3>
+
+@if (cliente == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Telefono</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach(Cliente c in cliente)
+            {
+                <tr>
+                    <td>@c.Nombre</td>
+                    <td>@c.Correo</td>
+                    <td>@c.Telefono</td>
+                    <td>@c.Fecha</td>
+
+                </tr>               
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Cliente> cliente;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            cliente = await ClientesServicio.ListarClientes();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+}
