@@ -13,7 +13,6 @@ namespace BlazorCRUD.Data
         [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "El correo electrónico no es válido.")]
         public string Correo { get; set; }
 
-
         [Required(ErrorMessage = "Campo Obligatorio")]
         public string Telefono { get; set; }
 

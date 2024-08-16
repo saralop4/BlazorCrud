@@ -26,5 +26,10 @@ namespace BlazorCRUD.Servicios
             else
                 return null; 
         }
+
+        public Task<IEnumerable<Cliente>> ListarClientes()
+        {
+            return _clienteRepositorio.ListarClientes();
+        }
     }
 }

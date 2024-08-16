@@ -6,5 +6,6 @@ namespace BlazorCRUD.Repositorio
     {
 
         Task<bool> GuardarCliente(Cliente cliente);
+        Task<IEnumerable<Cliente>> ListarClientes();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using BlazorCRUD.Data;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System.Data.SqlClient;
 
 namespace BlazorCRUD.Repositorio
@@ -8,7 +7,8 @@ namespace BlazorCRUD.Repositorio
     {
         private readonly string _cadenaConexion;
 
-        public RepositorioCliente(string cadenaConexion)        {
+        public RepositorioCliente(string cadenaConexion)
+        {
             _cadenaConexion = cadenaConexion;
         }
 
@@ -19,6 +19,10 @@ namespace BlazorCRUD.Repositorio
 
         public async Task<bool> GuardarCliente(Cliente cliente)
         {
+
+            Console.WriteLine("*********Repositorio************");
+            Console.WriteLine(cliente);
+
             Boolean clienteCreado = false;
             SqlConnection sqlConexion = conexion();
             SqlCommand comm = null;
@@ -53,5 +57,46 @@ namespace BlazorCRUD.Repositorio
 
         }
 
+        public async Task<IEnumerable<Cliente>> ListarClientes()
+        {
+             List<Cliente> lista = new List<Cliente>();
+
+            SqlConnection sqlConexion = conexion();
+            SqlCommand comm = null;
+
+            try
+            {
+                sqlConexion.Open();
+                comm = sqlConexion.CreateCommand();
+                comm.CommandText = "dbo.ListarClientes";
+                comm.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlDataReader reader = await comm.ExecuteReaderAsync();    
+                while (reader.Read())
+                {
+                    Cliente c = new Cliente();
+                    c.Id= Convert.ToInt32(reader["id"]);    
+                    c.Nombre= reader["nombre"].ToString();
+                    c.Correo = reader["correo"].ToString();
+                    c.Telefono = reader["telefono"].ToString();
+                    c.Fecha = Convert.ToDateTime(reader["fecha"]);
+                    lista.Add(c);
+
+                }
+                reader.Close(); 
+
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message + "Error al listar datos del cliente");
+            }
+            finally
+            {
+                comm.Dispose();
+                sqlConexion.Close();
+                sqlConexion.Dispose();
+            }
+
+            return lista;
+        }
     }
 }

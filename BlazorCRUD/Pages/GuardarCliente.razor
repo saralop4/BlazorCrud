@@ -1,0 +1,87 @@
+﻿@page "/GuardarCliente" 
+@using Data
+@using Interfaces
+@using Newtonsoft.Json
+@inject IClienteServicios ClienteServicios
+
+<h3>Clientes</h3>
+
+
+<EditForm Model="@cliente" OnValidSubmit="ManejarValidacionSubmit">
+    <DataAnnotationsValidator/>
+
+    <table class="table">
+
+        <tr>
+            <td>Nombre:</td>
+            <td> <input type="text" id="nombre" @bind="cliente.Nombre" />
+                <ValidationMessage For="@(()=> cliente.Nombre)"/> </td>
+        </tr>
+
+        <tr>
+            <td>Correo:</td>
+            <td> <input type="text" id="correo" @bind="cliente.Correo" />
+             <ValidationMessage For="@(()=> cliente.Correo)" /></td>
+        </tr>
+
+        <tr>
+            <td>Telefono:</td>
+            <td> <InputText id="telefono" @bind-Value="cliente.Telefono" /> 
+             <ValidationMessage For="@(()=> cliente.Telefono)" /> </td>
+        </tr>
+
+        <tr>
+            <td>Fecha:</td>
+            <input type="datetime-local" id="fecha" @bind="cliente.Fecha" />
+            <ValidationMessage For="@(()=> cliente.Fecha)" />
+        </tr>
+
+        <tr>
+            <td>
+                @* el botón de "guardar" está ligado al evento OnValidSubmit, asegurando que solo se guarde si todas las validaciones pasan. *@
+                <input type="submit" class="btn btn-primary" value="guardar" />
+
+                <input type="button" value="cancelar" class="btn btn-secondary" @onclick="Cancelar"/>
+            </td>
+        </tr>
+    </table>
+
+</EditForm>
+
+@code {
+
+    Cliente cliente = new Cliente();
+
+    // OnInitialized es un método específico del ciclo de vida del componente en Blazor. 
+    // Blazor lo reconoce y lo llama automáticamente al inicializar el componente. 
+    // OnInitialized: Es un método sobreescrito(override) que forma parte de la clase base ComponentBase en Blazor.
+    // Cuando Blazor inicializa el componente, busca y llama automáticamente a este método.
+    protected override void OnInitialized()
+    {
+        cliente.Fecha = DateTime.Now;
+    }
+    //El evento OnValidSubmit está configurado para manejar la validación y enviar el formulario
+    private async Task ManejarValidacionSubmit()
+    {
+        Console.WriteLine("Formulario Validado Correctamente");
+        await Guardar();
+    }
+
+
+    protected async Task Guardar()
+    {
+
+        // Guardar el cliente si la fecha es válida
+        Console.WriteLine("************** ");
+        Console.WriteLine("*************** ");
+        Console.WriteLine(JsonConvert.SerializeObject(cliente));
+        await ClienteServicios.GuardarCliente(cliente);
+    }
+    protected void Cancelar()
+    {
+
+    }
+
+    
+
+}
