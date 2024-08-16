@@ -39,9 +39,10 @@
         <tr>
             <td>
                 @* el botón de "guardar" está ligado al evento OnValidSubmit, asegurando que solo se guarde si todas las validaciones pasan. *@
-                <input type="submit" class="btn btn-primary" value="guardar" />
+               @*  <input type="submit" class="btn btn-primary" value="guardar" /> *@
+                <button type="submit" class="btn btn-outline-success">Guardar</button>
+                <button type="button" class="btn btn-outline-danger" value="cancelar" @onclick="Cancelar">Cancelar</button>
 
-                <input type="button" value="cancelar" class="btn btn-secondary" @onclick="Cancelar"/>
             </td>
         </tr>
     </table>
